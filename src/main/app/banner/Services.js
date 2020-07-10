@@ -45,6 +45,7 @@ let Call = {
 
     return Axios.post(`${API_URL}/banner`, formData, {
       headers: {
+          'Access-Control-Allow-Origin' : '*',
         token: window.localStorage.getItem("token") || ""
       }
     });
