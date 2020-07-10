@@ -14,7 +14,12 @@ class UserList extends React.Component {
     this.state = {
       visible: { add: false, edit: false, role: false },
       columns: [
-        { title: "Name", dataIndex: "name", key: "name", render: u => (<span>{`${u.first} ${u.last}`}</span>) },
+        {
+          title: "Name",
+          dataIndex: "name",
+          key: "name",
+          render: u => <span>{`${u.first} ${u.last}`}</span>
+        },
         {
           title: "Phone",
           dataIndex: "contact",
@@ -64,6 +69,22 @@ class UserList extends React.Component {
               })}
             </span>
           )
+        },
+        {
+          title: "Verified",
+          dataIndex: null,
+          key: "is_verified",
+          render: (a, i) => {
+            return (
+              <input
+                type="checkbox"
+                checked={a.is_verified}
+                onChange={e => {
+                  this.onChangeVerification(e, a._id);
+                }}
+              />
+            );
+          }
         },
         {
           title: "Active",
@@ -117,7 +138,7 @@ class UserList extends React.Component {
       pagination: { pageSize: 10, current: 1 },
       loading: false,
       user: undefined,
-      roles: ''
+      roles: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -135,15 +156,16 @@ class UserList extends React.Component {
 
   handleAddRoleOk = e => {
     let roles = this.state.roles.split(",").map(item => item.trim());
-    Call.update(this.state.user._id, { roles }).then(d => {
-      this.setState({
-        visible: { add: false, edit: false, role: false }
+    Call.update(this.state.user._id, { roles })
+      .then(d => {
+        this.setState({
+          visible: { add: false, edit: false, role: false }
+        });
+        this.get();
+      })
+      .catch(error => {
+        message.error(error.message);
       });
-      this.get();
-    }).catch(error => {
-      message.error(error.message)
-    });
-
   };
 
   showUserEditModal = (e, u) => {
@@ -191,7 +213,7 @@ class UserList extends React.Component {
     if (!params) params = { limit: pagination.pageSize, page: pagination.current, start };
     Api(apiRoutes.list, params)
       .then(data => {
-        console.log(data)
+        console.log(data);
         const pagination = { ...this.state.pagination };
         pagination.total = data.total;
         this.setState({
@@ -222,7 +244,30 @@ class UserList extends React.Component {
           })
           .catch(err => message.error(err.message));
       },
-      onCancel() { }
+      onCancel() {}
+    });
+  };
+
+  onChangeVerification = (e, id) => {
+    let checked = !e.target.checked;
+    var target = e.target;
+    let get = this.get;
+    e.target.checked = checked;
+    confirm({
+      title: "Are you sure to change?",
+      content: "Verification will be " + !e.target.checked,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        Call.update(id, { is_verified: !checked })
+          .then(data => {
+            target.checked = !checked;
+            get();
+          })
+          .catch(err => message.error(err.message));
+      },
+      onCancel() {}
     });
   };
 
@@ -250,15 +295,13 @@ class UserList extends React.Component {
       if (err) {
         return;
       }
-      let email = this.state.user.contact.find(o => o.type === 'email');
+      let email = this.state.user.contact.find(o => o.type === "email");
 
-      let phone = this.state.user.contact.find(o => o.type === 'phone');
+      let phone = this.state.user.contact.find(o => o.type === "phone");
 
-      if (email)
-        values.email_verified = email.is_verified;
+      if (email) values.email_verified = email.is_verified;
 
-      if (phone)
-        values.phone_verified = phone.is_verified;
+      if (phone) values.phone_verified = phone.is_verified;
       Call.update(this.state.user._id, values)
         .then(d => {
           form.resetFields();
@@ -299,7 +342,9 @@ class UserList extends React.Component {
         <Table
           tableLayout="fixed"
           columns={this.state.columns}
-          expandedRowRender={record => <p style={{ margin: 0 }}>{record.roles.map(r => r).join(' | ')}</p>}
+          expandedRowRender={record => (
+            <p style={{ margin: 0 }}>{record.roles.map(r => r).join(" | ")}</p>
+          )}
           dataSource={this.state.data}
           pagination={this.state.pagination}
           loading={this.state.loading}
@@ -311,7 +356,11 @@ class UserList extends React.Component {
           onOk={this.handleAddRoleOk}
           onCancel={this.handleCancel}
         >
-          <Input placeholder="Name" defaultValue={this.state.user ? this.state.user.roles.toString() : ''} onChange={this.handleChange} />
+          <Input
+            placeholder="Name"
+            defaultValue={this.state.user ? this.state.user.roles.toString() : ""}
+            onChange={this.handleChange}
+          />
         </Modal>
 
         <AddUserModal
@@ -330,8 +379,8 @@ class UserList extends React.Component {
             user={this.state.user}
           />
         ) : (
-            <div></div>
-          )}
+          <div></div>
+        )}
       </>
     );
   }
