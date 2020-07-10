@@ -8,16 +8,34 @@ import EditPost from "./EditPost";
 import EditProfile from "../banner/EditProfile";
 const { confirm } = Modal;
 
-
 class Post extends React.Component {
-
   //
-
 
   state = {
     visible: { add: false, edit: false, profile: false },
     columns: [
-      { title: "", dataIndex: "profile", key: "profile", render: p => (<img src={`${p.url}${p.name}_small.jpg`} />) },
+      {
+        title: "",
+        dataIndex: "file",
+        key: "file",
+        render: p => {
+          return p.type.startsWith("image") ? (
+            <img src={`${p.url}${p.name}_small.jpg`} />
+          ) : (
+            <video
+              className="video-container video-container-overlay"
+              style={{ width: "200px" }}
+              autoPlay="true"
+              loop="true"
+              muted="true"
+              controls="true"
+              data-reactid=".0.1.0.0"
+            >
+              <source type="video/mp4" data-reactid=".0.1.0.0.0" src={`${p.url}${p.name}.mp4`} />
+            </video>
+          );
+        }
+      },
       { title: "Title", dataIndex: "title", key: "title" },
       { title: "Rank", dataIndex: "rank", key: "rank" },
       {
@@ -69,7 +87,6 @@ class Post extends React.Component {
     post: null
   };
 
-
   handleAddOk = e => {
     this.setState({
       visible: { add: false, edit: false }
@@ -83,7 +100,6 @@ class Post extends React.Component {
   showEditProfileModal = (e, c) => {
     this.setState({ post: c, visible: { add: false, edit: false, profile: true } });
   };
-
 
   handleCancel = e => {
     this.setState({
@@ -139,17 +155,18 @@ class Post extends React.Component {
   remove = u => {
     let get = this.get;
     confirm({
-      title: 'Do you want to delete these Product?',
-      okText: 'Delete',
+      title: "Do you want to delete these Product?",
+      okText: "Delete",
       onOk() {
-        Call.remove(u._id).then(d => {
-          get();
-        }).catch(e => message.error(e.message)
-        );
+        Call.remove(u._id)
+          .then(d => {
+            get();
+          })
+          .catch(e => message.error(e.message));
       },
-      onCancel() { },
+      onCancel() {}
     });
-  }
+  };
 
   handleAdd = () => {
     const { form } = this.addForm.props;
@@ -256,8 +273,8 @@ class Post extends React.Component {
             post={this.state.post}
           />
         ) : (
-            <div></div>
-          )}
+          <div></div>
+        )}
 
         {this.state.post ? (
           <EditProfile
@@ -268,8 +285,8 @@ class Post extends React.Component {
             post={this.state.post}
           />
         ) : (
-            <div></div>
-          )}
+          <div></div>
+        )}
       </>
     );
   }
