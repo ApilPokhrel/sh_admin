@@ -648,14 +648,7 @@ class AddProduct extends React.Component {
             key={k}
           >
             {getFieldDecorator(`p_discounts[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: "Please input Discount in percent"
-                }
-              ]
+              validateTrigger: ["onChange", "onBlur"]
             })(<InputNumber placeholder="Discount" style={{ width: "100%" }} />)}
             {pkeys.length > 1 ? (
               <Icon
@@ -674,14 +667,7 @@ class AddProduct extends React.Component {
             key={k}
           >
             {getFieldDecorator(`p_qtys[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: "Please input Quantity"
-                }
-              ]
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Quantity" style={{ width: "100%" }} />)}
             {pkeys.length > 1 ? (
               <Icon
@@ -700,14 +686,7 @@ class AddProduct extends React.Component {
             key={k}
           >
             {getFieldDecorator(`p_labels[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"],
-              rules: [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: "Please input Label name"
-                }
-              ]
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Label Name" style={{ width: "100%" }} />)}
             {pkeys.length > 1 ? (
               <Icon
@@ -837,9 +816,10 @@ class AddProduct extends React.Component {
               </Col>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator("discount", {
-                    rules: [{ required: true, message: "Please provide product Discount!" }]
-                  })(
+                  {getFieldDecorator(
+                    "discount",
+                    {}
+                  )(
                     <InputNumber
                       style={{ width: "100%" }}
                       min={1}
