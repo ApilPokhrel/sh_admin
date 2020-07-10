@@ -19,7 +19,7 @@ class Post extends React.Component {
         dataIndex: "file",
         key: "file",
         render: p => {
-          return p.type.startsWith("image") ? (
+          return p && p.type && p.type.startsWith("image") ? (
             <img src={`${p.url}${p.name}_small.jpg`} />
           ) : (
             <video
