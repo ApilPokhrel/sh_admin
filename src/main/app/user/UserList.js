@@ -20,14 +20,15 @@ class UserList extends React.Component {
           key: "name",
           render: u => <span>{`${u.first} ${u.last}`}</span>
         },
+
         {
-          title: "Phone",
+          title: "Email",
           dataIndex: "contact",
-          key: "phone",
+          key: "email",
           render: u => (
             <span>
               {u.map((e, i) => {
-                if (e.type === "phone") {
+                if (e.type === "email") {
                   if (e.is_verified)
                     return (
                       <Badge key={i} status="success">
@@ -46,13 +47,13 @@ class UserList extends React.Component {
           )
         },
         {
-          title: "Email",
+          title: "Phone",
           dataIndex: "contact",
-          key: "email",
+          key: "phone",
           render: u => (
             <span>
               {u.map((e, i) => {
-                if (e.type === "email") {
+                if (e.type === "phone") {
                   if (e.is_verified)
                     return (
                       <Badge key={i} status="success">
