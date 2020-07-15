@@ -226,21 +226,6 @@ class AddProduct extends React.Component {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("c");
     payload.sub_type = id;
-    let prices = [];
-    let p_discounts = payload.p_discounts;
-    if (p_discounts && p_discounts.length) {
-      p_discounts.map((e, i) => {
-        prices.push({
-          discount: parseInt(e),
-          qty: parseInt(payload.p_qtys[i]),
-          label: payload.p_labels[i]
-        });
-      });
-      payload.prices = prices;
-      delete payload.p_discounts;
-      delete payload.p_qtys;
-      delete payload.p_labels;
-    }
 
     let colors = [];
     if (payload.c_names && payload.c_names.length) {
@@ -349,9 +334,6 @@ class AddProduct extends React.Component {
 
     getFieldDecorator("ukeys", { initialValue: [] });
     const ukeys = getFieldValue("ukeys");
-
-    getFieldDecorator("pkeys", { initialValue: [] });
-    const pkeys = getFieldValue("pkeys");
 
     getFieldDecorator("ckeys", { initialValue: [] });
     const ckeys = getFieldValue("ckeys");
@@ -638,68 +620,6 @@ class AddProduct extends React.Component {
       </Row>
     ));
 
-    const pricesFormItems = pkeys.map((k, index) => (
-      <Row gutter={[8, 8]}>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_discounts[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"]
-            })(<InputNumber placeholder="Discount" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_qtys[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"]
-            })(<Input placeholder="Quantity" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_labels[${k}]`, {
-              validateTrigger: ["onChange", "onBlur"]
-            })(<Input placeholder="Label Name" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-      </Row>
-    ));
-
     const { fileList } = this.state;
     const props = {
       onRemove: file => {
@@ -784,25 +704,17 @@ class AddProduct extends React.Component {
                   })(<Checkbox>Product Available</Checkbox>)}
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item>
-                  {getFieldDecorator("is_discount", {
-                    valuePropName: "checked",
-                    initialValue: false
-                  })(<Checkbox>Discount Available</Checkbox>)}
-                </Form.Item>
-              </Col>
             </Row>
             <Row gutter={[8, 8]}>
               <Col span={8}>
                 <Form.Item hasFeedback>
-                  {getFieldDecorator("priceUnit", {
-                    rules: [{ required: true, message: "Please select a price unit!" }]
+                  {getFieldDecorator("currency", {
+                    rules: [{ required: true, message: "Please select a Currency!" }]
                   })(
-                    <Select placeholder="Price unit">
-                      <Option value="NPR">Neplese Rupee</Option>
-                      <Option value="INR">Indian Rupee</Option>
-                      <Option value="USD">US Dollar</Option>
+                    <Select placeholder="Currency">
+                      <Option value="npr">Neplese Rupee</Option>
+                      <Option value="inr">Indian Rupee</Option>
+                      <Option value="usd">US Dollar</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -816,26 +728,12 @@ class AddProduct extends React.Component {
               </Col>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator(
-                    "discount",
-                    {}
-                  )(
-                    <InputNumber
-                      style={{ width: "100%" }}
-                      min={1}
-                      placeholder="Discount in percent"
-                    />
+                  {getFieldDecorator("price_unit")(
+                    <Input style={{ width: "100%" }} placeholder="Price unit (normal or feet)" />
                   )}
                 </Form.Item>
               </Col>
             </Row>
-
-            {pricesFormItems}
-            <Form.Item {...formItemLayoutWithOutLabel}>
-              <Button type="dashed" onClick={this.addP} style={{ width: "100%" }}>
-                <Icon type="plus" /> Add Wholesale
-              </Button>
-            </Form.Item>
 
             <Row gutter={[8, 8]}>
               <Col span={8}>

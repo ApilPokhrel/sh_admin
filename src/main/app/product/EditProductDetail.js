@@ -22,8 +22,6 @@ let idk = 0,
   idp = 0,
   idc = 0;
 
-
-
 class EditProductDetail extends React.Component {
   state = {
     subtypes: undefined,
@@ -186,30 +184,19 @@ class EditProductDetail extends React.Component {
         console.log("Received values of form: ", values);
         let parsed = await this.parsePayload(values);
         console.log("Parsed values ", parsed);
-        Call.update(this.props._id, parsed).then(d => {
-          this.setState({ loading: false, product: d.data })
-        }).catch(error => {
-          this.setState({ loading: false })
-          message.error(error.message)
-        });
+        Call.update(this.props._id, parsed)
+          .then(d => {
+            this.setState({ loading: false, product: d.data });
+          })
+          .catch(error => {
+            this.setState({ loading: false });
+            message.error(error.message);
+          });
       }
     });
   };
 
-  parsePayload = (payload) => {
-    let prices = [];
-    let p_discounts = payload.p_discounts;
-    if (p_discounts && p_discounts.length) {
-      p_discounts.map((e, i) => {
-        if (e)
-          prices.push({ discount: e, qty: payload.qtys[i], label: payload.labels[i] });
-      });
-      payload.prices = prices;
-      delete payload.p_discounts;
-      delete payload.p_qtys;
-      delete payload.p_labels;
-    }
-
+  parsePayload = payload => {
     let colors = [];
     if (payload.c_names && payload.c_names.length) {
       payload.c_names.map((e, i) => {
@@ -257,9 +244,7 @@ class EditProductDetail extends React.Component {
     }
 
     return payload;
-
-  }
-
+  };
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -288,9 +273,6 @@ class EditProductDetail extends React.Component {
 
     getFieldDecorator("ukeys", { initialValue: this.props.product.units });
     const ukeys = getFieldValue("ukeys");
-
-    getFieldDecorator("pkeys", { initialValue: this.props.product.prices });
-    const pkeys = getFieldValue("pkeys");
 
     getFieldDecorator("ckeys", { initialValue: this.props.product.colors });
     const ckeys = getFieldValue("ckeys") || [];
@@ -353,7 +335,6 @@ class EditProductDetail extends React.Component {
             ) : null}
           </Form.Item>
         </Col>
-
       </Row>
     ));
 
@@ -365,12 +346,10 @@ class EditProductDetail extends React.Component {
             label={index === 0 ? "" : ""}
             required={false}
             key={k}
-
           >
             {getFieldDecorator(`f_values[${k}]`, {
               initialValue: k,
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Feature value" style={{ width: "100%", marginRight: 2 }} />)}
             {fkeys.length > 1 ? (
               <Icon
@@ -391,8 +370,7 @@ class EditProductDetail extends React.Component {
           >
             {getFieldDecorator(`f_ranks[${k}]`, {
               initialValue: 1,
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<InputNumber placeholder="Feature Rank" style={{ width: "60%", marginRight: 8 }} />)}
             {fkeys.length > 1 ? (
               <Icon
@@ -417,8 +395,7 @@ class EditProductDetail extends React.Component {
           >
             {getFieldDecorator(`s_names[${k}]`, {
               initialValue: k.key,
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Spec name" style={{ width: "60%", marginRight: 8 }} />)}
             {skeys.length > 1 ? (
               <Icon
@@ -439,8 +416,7 @@ class EditProductDetail extends React.Component {
             {getFieldDecorator(`s_values[${k}]`, {
               initialValue: k.value,
 
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Spec value" style={{ width: "60%", marginRight: 8 }} />)}
             {skeys.length > 1 ? (
               <Icon
@@ -460,8 +436,7 @@ class EditProductDetail extends React.Component {
           >
             {getFieldDecorator(`s_ranks[${k}]`, {
               initialValue: k.rank,
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<InputNumber placeholder="Spec Rank" style={{ width: "60%", marginRight: 8 }} />)}
             {skeys.length > 1 ? (
               <Icon
@@ -486,8 +461,7 @@ class EditProductDetail extends React.Component {
           >
             {getFieldDecorator(`u_names[${k}]`, {
               initialValue: k.name,
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Unit name" style={{ width: "60%", marginRight: 8 }} />)}
             {ukeys.length > 1 ? (
               <Icon
@@ -508,8 +482,7 @@ class EditProductDetail extends React.Component {
             {getFieldDecorator(`u_values[${k}]`, {
               initialValue: k.value,
 
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Unit value" style={{ width: "60%", marginRight: 8 }} />)}
             {ukeys.length > 1 ? (
               <Icon
@@ -531,8 +504,7 @@ class EditProductDetail extends React.Component {
             {getFieldDecorator(`u_standards[${k}]`, {
               initialValue: k.standard,
 
-              validateTrigger: ["onChange", "onBlur"],
-
+              validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Unit Standard" style={{ width: "60%", marginRight: 8 }} />)}
             {ukeys.length > 1 ? (
               <Icon
@@ -546,85 +518,12 @@ class EditProductDetail extends React.Component {
       </Row>
     ));
 
-    const pricesFormItems = pkeys.map((k, index) => (
-      <Row gutter={[8, 8]}>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_discounts[${k}]`, {
-              initialValue: k.discount,
-
-              validateTrigger: ["onChange", "onBlur"],
-
-            })(<InputNumber placeholder="Discount" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_qtys[${k}]`, {
-              initialValue: k.qty,
-
-              validateTrigger: ["onChange", "onBlur"],
-
-            })(<Input placeholder="Quantity" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-            label={index === 0 ? "" : ""}
-            required={false}
-            key={k}
-          >
-            {getFieldDecorator(`p_labels[${k}]`, {
-              initialValue: k.label,
-
-              validateTrigger: ["onChange", "onBlur"],
-
-            })(<Input placeholder="Label Name" style={{ width: "100%" }} />)}
-            {pkeys.length > 1 ? (
-              <Icon
-                className="dynamic-delete-button"
-                type="minus-circle-o"
-                onClick={() => this.removeP(k)}
-              />
-            ) : null}
-          </Form.Item>
-        </Col>
-      </Row>
-    ));
-
-
     return (
       <Form
         onSubmit={this.handleSubmit}
         className="login-form col-md-8 col-xs-11 col-sm-10 col-lg-8"
       >
         <Spin tip="Updating..." spinning={this.state.loading}>
-
           <Form.Item>
             {getFieldDecorator("name", {
               initialValue: this.props.product.name,
@@ -671,30 +570,22 @@ class EditProductDetail extends React.Component {
               <Form.Item>
                 {getFieldDecorator("is_available", {
                   valuePropName: "checked",
-                  initialValue: this.props.product.is_available,
+                  initialValue: this.props.product.is_available
                 })(<Checkbox>Product Available</Checkbox>)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item>
-                {getFieldDecorator("is_discount", {
-                  valuePropName: "checked",
-                  initialValue: this.props.product.is_discount
-                })(<Checkbox>Discount Available</Checkbox>)}
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[8, 8]}>
             <Col span={8}>
               <Form.Item hasFeedback>
-                {getFieldDecorator("priceUnit", {
+                {getFieldDecorator("currency", {
                   initialValue: this.props.product.priceUnit,
-                  rules: [{ required: true, message: "Please select a price unit!" }]
+                  rules: [{ required: true, message: "Please select a Currency!" }]
                 })(
                   <Select placeholder="Price unit">
-                    <Option value="NPR">Neplese Rupee</Option>
-                    <Option value="INR">Indian Rupee</Option>
-                    <Option value="USD">US Dollar</Option>
+                    <Option value="npr">Neplese Rupee</Option>
+                    <Option value="inr">Indian Rupee</Option>
+                    <Option value="usd">US Dollar</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -710,23 +601,17 @@ class EditProductDetail extends React.Component {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator("discount", {
-                  initialValue: this.props.product.discount,
-
-                  rules: [{ required: true, message: "Please provide product Discount!" }]
+                {getFieldDecorator("price_unit", {
+                  initialValue: this.props.product.discount
                 })(
-                  <InputNumber style={{ width: "100%" }} min={1} placeholder="Discount in percent" />
+                  <Input
+                    style={{ width: "100%" }}
+                    placeholder="Price Unit (normal or feet) in percent"
+                  />
                 )}
               </Form.Item>
             </Col>
           </Row>
-
-          {pricesFormItems}
-          <Form.Item {...formItemLayoutWithOutLabel}>
-            <Button type="dashed" onClick={this.addP} style={{ width: "100%" }}>
-              <Icon type="plus" /> Add Wholesale
-          </Button>
-          </Form.Item>
 
           <Row gutter={[8, 8]}>
             <Col span={8}>
@@ -737,7 +622,9 @@ class EditProductDetail extends React.Component {
                   rules: [
                     { required: true, message: "Please provide minimum product required to buy!" }
                   ]
-                })(<InputNumber min={1} style={{ width: "100%" }} placeholder="Minimum required" />)}
+                })(
+                  <InputNumber min={1} style={{ width: "100%" }} placeholder="Minimum required" />
+                )}
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -753,47 +640,43 @@ class EditProductDetail extends React.Component {
             </Col>
           </Row>
 
-
-
           {colorFormItems}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.addC} style={{ width: "100%" }}>
               <Icon type="plus" /> Add Colors
-          </Button>
+            </Button>
           </Form.Item>
 
           {featureFormItems}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.addF} style={{ width: "100%" }}>
               <Icon type="plus" /> Add features
-          </Button>
+            </Button>
           </Form.Item>
 
           {specFormItems}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.addS} style={{ width: "100%" }}>
               <Icon type="plus" /> Add Specs
-          </Button>
+            </Button>
           </Form.Item>
           {unitFormItems}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button type="dashed" onClick={this.addU} style={{ width: "100%" }}>
               <Icon type="plus" /> Add Units
-          </Button>
+            </Button>
           </Form.Item>
 
           <Form.Item>
-            {getFieldDecorator("tags",
-              {
-                initialValue: this.props.product.tags ? this.props.product.tags.toString() : "",
-              })(
-                <Input
-                  prefix={<Icon type="tags" style={{ color: "rgba(0,0,0,.25)" }} />}
-                  placeholder="Product tags"
-                />
-              )}
+            {getFieldDecorator("tags", {
+              initialValue: this.props.product.tags ? this.props.product.tags.toString() : ""
+            })(
+              <Input
+                prefix={<Icon type="tags" style={{ color: "rgba(0,0,0,.25)" }} />}
+                placeholder="Product tags"
+              />
+            )}
           </Form.Item>
-
 
           <Form.Item>
             <Button
@@ -803,7 +686,7 @@ class EditProductDetail extends React.Component {
               className="login-form-button"
             >
               Update
-          </Button>
+            </Button>
           </Form.Item>
         </Spin>
       </Form>
@@ -820,6 +703,6 @@ EditProductDetail.defaultProps = {
     colors: [],
     tags: ""
   }
-}
+};
 
 export default Form.create({ name: "edit_product_detail" })(EditProductDetail);
