@@ -286,7 +286,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`c_names[${k}]`, {
+            {getFieldDecorator(`c_names[${index}]`, {
               initialValue: k.name,
 
               validateTrigger: ["onChange", "onBlur"],
@@ -314,7 +314,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`c_values[${k}]`, {
+            {getFieldDecorator(`c_values[${index}]`, {
               initialValue: k.value,
 
               validateTrigger: ["onChange", "onBlur"],
@@ -347,7 +347,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`f_values[${k}]`, {
+            {getFieldDecorator(`f_values[${index}]`, {
               initialValue: k,
               validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Feature value" style={{ width: "100%", marginRight: 2 }} />)}
@@ -368,7 +368,7 @@ class EditProductDetail extends React.Component {
             key={k}
             style={{ width: "100%" }}
           >
-            {getFieldDecorator(`f_ranks[${k}]`, {
+            {getFieldDecorator(`f_ranks[${index}]`, {
               initialValue: 1,
               validateTrigger: ["onChange", "onBlur"]
             })(<InputNumber placeholder="Feature Rank" style={{ width: "60%", marginRight: 8 }} />)}
@@ -393,7 +393,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`s_names[${k}]`, {
+            {getFieldDecorator(`s_names[${index}]`, {
               initialValue: k.key,
               validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Spec name" style={{ width: "60%", marginRight: 8 }} />)}
@@ -413,7 +413,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`s_values[${k}]`, {
+            {getFieldDecorator(`s_values[${index}]`, {
               initialValue: k.value,
 
               validateTrigger: ["onChange", "onBlur"]
@@ -434,7 +434,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`s_ranks[${k}]`, {
+            {getFieldDecorator(`s_ranks[${index}]`, {
               initialValue: k.rank,
               validateTrigger: ["onChange", "onBlur"]
             })(<InputNumber placeholder="Spec Rank" style={{ width: "60%", marginRight: 8 }} />)}
@@ -459,7 +459,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`u_names[${k}]`, {
+            {getFieldDecorator(`u_names[${index}]`, {
               initialValue: k.name,
               validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Unit name" style={{ width: "60%", marginRight: 8 }} />)}
@@ -479,7 +479,7 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`u_values[${k}]`, {
+            {getFieldDecorator(`u_values[${index}]`, {
               initialValue: k.value,
 
               validateTrigger: ["onChange", "onBlur"]
@@ -501,9 +501,8 @@ class EditProductDetail extends React.Component {
             required={false}
             key={k}
           >
-            {getFieldDecorator(`u_standards[${k}]`, {
+            {getFieldDecorator(`u_standards[${index}]`, {
               initialValue: k.standard,
-
               validateTrigger: ["onChange", "onBlur"]
             })(<Input placeholder="Unit Standard" style={{ width: "60%", marginRight: 8 }} />)}
             {ukeys.length > 1 ? (
