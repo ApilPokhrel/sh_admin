@@ -578,7 +578,7 @@ class EditProductDetail extends React.Component {
             <Col span={8}>
               <Form.Item hasFeedback>
                 {getFieldDecorator("currency", {
-                  initialValue: this.props.product.priceUnit,
+                  initialValue: this.props.product.currency,
                   rules: [{ required: true, message: "Please select a Currency!" }]
                 })(
                   <Select placeholder="Price unit">
@@ -601,7 +601,7 @@ class EditProductDetail extends React.Component {
             <Col span={8}>
               <Form.Item>
                 {getFieldDecorator("price_unit", {
-                  initialValue: this.props.product.discount
+                  initialValue: this.props.product.price_unit
                 })(
                   <Input
                     style={{ width: "100%" }}
