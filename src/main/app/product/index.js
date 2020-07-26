@@ -15,27 +15,25 @@ class Product extends React.Component {
         dataIndex: "sub_type",
         key: "sub_type",
         render: (a, i) => {
-          return (
-            <span>{a.name}</span>
-          );
+          return <span>{a && a.name ? a.name : ""}</span>;
         }
       },
       {
         title: "Status",
         dataIndex: "status",
-        key: "status",
+        key: "status"
       },
       {
         title: "Condition",
         dataIndex: "condition",
-        key: "condition",
+        key: "condition"
       },
       {
         title: "Available",
         dataIndex: null,
         key: "available",
         render: (a, i) => {
-          console.log(a)
+          console.log(a);
           return (
             <input
               type="checkbox"
@@ -85,31 +83,28 @@ class Product extends React.Component {
     user: null
   };
 
-
-
   editProduct = (e, u) => {
     this.props.history.push("/edit_product?p=" + u._id);
   };
 
   deleteProduct = (e, u) => {
     confirm({
-      title: 'Do you want to delete these Product?',
-      okText: 'Delete',
+      title: "Do you want to delete these Product?",
+      okText: "Delete",
       onOk() {
-        Call.delete(u._id).then(d => {
-          this.get();
-        }).catch(e => message.error(e.message)
-        );
+        Call.delete(u._id)
+          .then(d => {
+            this.get();
+          })
+          .catch(e => message.error(e.message));
       },
-      onCancel() { },
+      onCancel() {}
     });
   };
-
 
   componentDidMount() {
     this.get();
   }
-
 
   handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...this.state.pagination };
@@ -167,15 +162,11 @@ class Product extends React.Component {
           })
           .catch(err => message.error(err.message));
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
-
-
-
   render() {
-
     return (
       <>
         <PageHeader
@@ -208,7 +199,6 @@ class Product extends React.Component {
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
-
       </>
     );
   }
