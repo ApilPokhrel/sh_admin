@@ -88,13 +88,14 @@ class Product extends React.Component {
   };
 
   deleteProduct = (e, u) => {
+    let get = this.get;
     confirm({
       title: "Do you want to delete these Product?",
       okText: "Delete",
       onOk() {
         Call.delete(u._id)
           .then(d => {
-            this.get();
+            get();
           })
           .catch(e => message.error(e.message));
       },
